@@ -7,6 +7,8 @@ import { toast } from '@/hooks/use-toast';
 import { useT, useLocale } from '@/contexts/Locale';
 import { useTranslatedDog } from '@/hooks/useTranslatedDog';
 import { AdaptivePetPhoto } from '@/components/AdaptivePetPhoto';
+import { SocialShareRow } from '@/components/SocialShareRow';
+import { WeatherChip } from '@/components/WeatherChip';
 
 interface Props {
   dog: Dog;
@@ -115,15 +117,22 @@ export function DogDetailSheet({ dog: rawDog, open, onOpenChange, onShowOnMap }:
             </button>
           )}
 
+          <div className="flex items-center justify-between gap-2">
+            <WeatherChip lat={dog.publicLat ?? dog.lat} lng={dog.publicLng ?? dog.lng} />
+          </div>
+
           {isPersistedPetId(dog.id) && (
-            <button
-              type="button"
-              onClick={handleShare}
-              className="glass flex w-full items-center justify-center gap-2 rounded-2xl border border-border/60 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-primary/40 active:scale-[0.99]"
-            >
-              <Share2 className="h-4 w-4 text-primary" />
-              {locale === 'en' ? 'Share profile' : 'პროფილის გაზიარება'}
-            </button>
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={handleShare}
+                className="glass flex w-full items-center justify-center gap-2 rounded-2xl border border-border/60 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-primary/40 active:scale-[0.99]"
+              >
+                <Share2 className="h-4 w-4 text-primary" />
+                {locale === 'en' ? 'Share profile' : 'პროფილის გაზიარება'}
+              </button>
+              <SocialShareRow dog={dog} />
+            </div>
           )}
 
           {dog.description && (
