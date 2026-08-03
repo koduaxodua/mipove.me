@@ -152,3 +152,42 @@ export function useDogs() {
 
   return { dogs, addDog, loading };
 }
+
+const UUID_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** ერთი ცხოველის წამოღება /pet/:id გვერდისთვის — Supabase, ან sample/localStorage fallback. */
+export async function fetchDogById(id: string): Promise<Dog | null> {
+  if (supabase && UUID_ID_RE.test(id)) {
+    let { data, error } = await supabase
+      .from('pets_public')
+      .select(PUBLIC_PET_COLUMNS)
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) {
+      const fallback = await supabase
+        .from('pets')
+        .select(BASE_PET_PUBLIC_COLUMNS)
+        .eq('status', 'available')
+        .eq('id', id)
+        .maybeSingle();
+      data = fallback.data;
+      error = fallback.error;
+    }
+
+    if (!error && data) return petRowToDog(data);
+    if (error) console.warn('[pet-page] fetch by id failed', { id });
+    return null;
+  }
+
+  const sample = sampleDogs.find(dog => dog.id === id);
+  if (sample) return sample;
+
+  try {
+    const stored = localStorage.getItem(CUSTOM_DOGS_KEY);
+    const custom: Dog[] = stored ? JSON.parse(stored) : [];
+    return custom.find(dog => dog.id === id) ?? null;
+  } catch {
+    return null;
+  }
+}

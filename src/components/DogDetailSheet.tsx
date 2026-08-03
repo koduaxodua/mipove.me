@@ -1,7 +1,8 @@
 import { Dog } from '@/data/dogs';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { MapPin, Phone, Heart, Calendar, Shield, Trash2, Check, AlertCircle, Map as MapIcon } from 'lucide-react';
-import { canRequestPetDeletion, useDeleteRequests } from '@/hooks/useDeleteRequests';
+import { MapPin, Phone, Heart, Calendar, Shield, Trash2, Check, AlertCircle, Map as MapIcon, Share2 } from 'lucide-react';
+import { canRequestPetDeletion, isPersistedPetId, useDeleteRequests } from '@/hooks/useDeleteRequests';
+import { sharePetLink } from '@/lib/sharePet';
 import { toast } from '@/hooks/use-toast';
 import { useT, useLocale } from '@/contexts/Locale';
 import { useTranslatedDog } from '@/hooks/useTranslatedDog';
@@ -64,6 +65,13 @@ export function DogDetailSheet({ dog: rawDog, open, onOpenChange, onShowOnMap }:
     }
   };
 
+  const handleShare = async () => {
+    const result = await sharePetLink(dog, locale);
+    if (result === 'copied') {
+      toast({ title: locale === 'en' ? 'Link copied' : 'ლინკი დაკოპირდა' });
+    }
+  };
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="h-[85dvh] rounded-t-3xl glass-strong !left-1/2 !-translate-x-1/2 !max-w-lg !w-full p-0 flex flex-col">
@@ -104,6 +112,17 @@ export function DogDetailSheet({ dog: rawDog, open, onOpenChange, onShowOnMap }:
                   {dog.location || (locale === 'en' ? 'Approximate location' : 'დაახლოებითი მდებარეობა')}
                 </span>
               </span>
+            </button>
+          )}
+
+          {isPersistedPetId(dog.id) && (
+            <button
+              type="button"
+              onClick={handleShare}
+              className="glass flex w-full items-center justify-center gap-2 rounded-2xl border border-border/60 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-primary/40 active:scale-[0.99]"
+            >
+              <Share2 className="h-4 w-4 text-primary" />
+              {locale === 'en' ? 'Share profile' : 'პროფილის გაზიარება'}
             </button>
           )}
 
