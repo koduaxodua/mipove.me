@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { LocationPicker } from '@/components/LocationPicker';
 import { useT, useLocale } from '@/contexts/Locale';
 import { AdaptivePetPhoto } from '@/components/AdaptivePetPhoto';
+import { BreedAutocomplete } from '@/components/BreedAutocomplete';
+import type { Species } from '@/data/dogs';
 
 const compressImage = (file: File, maxWidth = 800, quality = 0.7): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -156,6 +158,7 @@ export default function AddDog() {
   const [showRequiredErrors, setShowRequiredErrors] = useState(false);
   const [photoExifLocation, setPhotoExifLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [form, setForm] = useState({
+    species: 'dog' as Species,
     name: '',
     age: '',
     breed: '',
@@ -365,6 +368,32 @@ export default function AddDog() {
         )}
 
         {/* Two-column grid on tablet+ */}
+        <div className="glass rounded-2xl p-4">
+          <label className="mb-2 block text-sm font-medium text-primary-foreground">{t('addDog.field.species')}</label>
+          <div className="flex gap-3">
+            {([
+              { value: 'dog' as const, label: t('addDog.species.dog') },
+              { value: 'cat' as const, label: t('addDog.species.cat') },
+            ]).map(option => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => {
+                  setForm(prev => ({ ...prev, species: option.value, breed: '' }));
+                  console.log('[add-pet] species', option.value);
+                }}
+                className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition ${
+                  form.species === option.value
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-secondary-foreground'
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
             name="pet-name"
@@ -376,7 +405,15 @@ export default function AddDog() {
             error={showNameError ? (locale === 'en' ? 'Name is required.' : 'სახელის ველი სავალდებულოა.') : undefined}
           />
           <FormField label={t('addDog.field.age')} value={form.age} onChange={v => update('age', v)} placeholder={t('addDog.field.agePh')} />
-          <FormField label={t('addDog.field.breed')} value={form.breed} onChange={v => update('breed', v)} placeholder={t('addDog.field.breedPh')} />
+          <div className="sm:col-span-2">
+            <BreedAutocomplete
+              species={form.species}
+              value={form.breed}
+              onChange={v => update('breed', v)}
+              label={t('addDog.field.breed')}
+              placeholder={t('addDog.field.breedPh')}
+            />
+          </div>
         </div>
 
         <div className="glass rounded-2xl p-4">

@@ -9,7 +9,8 @@ import { MonthlyVisitors } from '@/components/MonthlyVisitors';
 import { AnimalTip } from '@/components/AnimalTip';
 import { useDogs } from '@/hooks/useDogs';
 import { useLikedDogs } from '@/hooks/useLikedDogs';
-import { RotateCcw, Map } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { RotateCcw, Map, BookOpen } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { useT } from '@/contexts/Locale';
 import type { Dog } from '@/data/dogs';
@@ -171,6 +172,13 @@ export default function Index() {
                 <Map className="h-4 w-4 text-primary" />
                 <span className="text-sm font-semibold text-primary">{t('index.action.map')}</span>
               </button>
+              <Link
+                to="/guide"
+                className="glass inline-flex items-center gap-2 px-5 py-3 rounded-full bg-secondary/70 hover:scale-105 active:scale-95 transition-transform"
+              >
+                <BookOpen className="h-4 w-4 text-primary" />
+                <span className="text-sm font-semibold text-foreground">{t('index.guides.cta')}</span>
+              </Link>
             </div>
             <AnimalTip />
           </div>

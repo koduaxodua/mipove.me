@@ -20,7 +20,7 @@ import NotFound from "./pages/NotFound";
 import PetPage from "./pages/PetPage";
 import { AboutPage, SafetyPage, HowItWorksPage, SeoGuard } from "./pages/ContentPages";
 import { GeorgianLandingPage } from "./pages/GeorgianLandingPage";
-import { GuideAdoptPage, GuideLostPage, GuideHelpPage } from "./pages/GuidePages";
+import { GuideHubPage, GuideAdoptPage, GuideLostPage, GuideHelpPage } from "./pages/GuidePages";
 import {
   HomePage as HomePageV2,
   AboutPage as AboutPageV2,
@@ -71,6 +71,7 @@ const App = () => (
             <Route path="/ka" element={<GeorgianLandingPage />} />
             <Route path="/app" element={<Index />} />
             <Route path="/pet/:id" element={<PetPage />} />
+            <Route path="/guide" element={<GuideHubPage />} />
             <Route path="/guide/dzaglis-ayvana" element={<GuideAdoptPage />} />
             <Route path="/guide/dakarguli-cxoveli" element={<GuideLostPage />} />
             <Route path="/guide/miusafari-cxovelis-daxmareba" element={<GuideHelpPage />} />

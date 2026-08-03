@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useLocale } from '@/contexts/Locale';
+import { translate } from '@/lib/translate';
 
 /**
  * უფასო public API (catfact.ninja) — მოკლე ცნობა ცხოველებზე.
- * ჩანს სვაიპის ბოლოს; თუ API მიუწვდომელია, უბრალოდ იშლება.
+ * ქართულ ლოკალზე MyMemory-ით ითარგმნება; თუ API მიუწვდომელია, იშლება.
  */
 export function AnimalTip() {
   const { locale } = useLocale();
@@ -11,14 +12,21 @@ export function AnimalTip() {
 
   useEffect(() => {
     let cancelled = false;
+    setFact(null);
+
     (async () => {
       try {
         const res = await fetch('https://catfact.ninja/fact');
         if (!res.ok) return;
         const body = (await res.json()) as { fact?: string };
-        if (!cancelled && typeof body.fact === 'string' && body.fact.length > 0) {
-          console.log('[animal-tip] loaded free catfact.ninja fact');
-          setFact(body.fact);
+        if (!body.fact) return;
+
+        const display =
+          locale === 'ka' ? await translate(body.fact, 'ka') : body.fact;
+
+        if (!cancelled) {
+          console.log('[animal-tip] loaded', { locale, translated: locale === 'ka' });
+          setFact(display);
         }
       } catch (error) {
         console.warn('[animal-tip] free API unavailable', {
@@ -26,10 +34,11 @@ export function AnimalTip() {
         });
       }
     })();
+
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [locale]);
 
   if (!fact) return null;
 

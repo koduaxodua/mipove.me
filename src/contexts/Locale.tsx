@@ -220,9 +220,14 @@ const TRANSLATIONS = {
   'common.close':           { ka: 'დახურვა', en: 'Close' },
   'common.loading':         { ka: 'იტვირთება...', en: 'Loading...' },
   'common.error':           { ka: 'შეცდომა', en: 'Error' },
-  'footer.copyright':       { ka: '© 2026 PawswipeGeo. ყველა უფლება დაცულია.', en: '© 2026 PawswipeGeo. All rights reserved.' },
+  'footer.copyright':       { ka: '© 2026 mipove.me. ყველა უფლება დაცულია.', en: '© 2026 mipove.me. All rights reserved.' },
+  'addDog.field.species':   { ka: 'სახეობა', en: 'Species' },
+  'addDog.species.dog':     { ka: 'ძაღლი', en: 'Dog' },
+  'addDog.species.cat':     { ka: 'კატა', en: 'Cat' },
+  'footer.guides':          { ka: 'გზამკვლევები', en: 'Guides' },
   'footer.terms':           { ka: 'პირობები', en: 'Terms' },
   'footer.privacy':         { ka: 'კონფიდენციალურობა', en: 'Privacy' },
+  'index.guides.cta':       { ka: 'გზამკვლევების ნახვა', en: 'Browse guides' },
 
   // Ad banner
   'ad.skipIn':              { ka: 'რეკლამა · გამოტოვება {seconds} წმ-ში', en: 'Ad · skip in {seconds}s' },

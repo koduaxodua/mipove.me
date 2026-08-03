@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, HeartHandshake, PawPrint, Plus } from 'lucide-react';
+import { ArrowRight, BookOpen, HeartHandshake, PawPrint, Plus } from 'lucide-react';
 
 export function GeorgianLandingPage() {
   return (
@@ -29,6 +29,9 @@ export function GeorgianLandingPage() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-3 text-sm">
+            <Link to="/guide" className="inline-flex items-center gap-2 text-muted-foreground underline">
+              <BookOpen className="h-4 w-4" /> გზამკვლევები
+            </Link>
             <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground underline">
               English version
             </Link>

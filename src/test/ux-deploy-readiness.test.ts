@@ -10,8 +10,10 @@ describe('ux copy and deploy readiness', () => {
     const source = read('src/components/BottomNav.tsx');
 
     expect(source).toContain("t('footer.copyright')");
-    expect(source).toContain("to=\"/terms\"");
-    expect(source).toContain("to=\"/ka/privacy\"");
+    expect(source).toContain("t('footer.guides')");
+    expect(source).toContain('to="/guide"');
+    expect(source).toContain('to="/terms"');
+    expect(source).toContain('to="/ka/privacy"');
   });
 
   it('uses npm-based Vercel build defaults compatible with this repository', () => {
@@ -36,9 +38,12 @@ describe('ux copy and deploy readiness', () => {
     const vercel = read('vercel.json');
 
     expect(app).toContain('path="/pet/:id"');
+    expect(app).toContain('path="/guide"');
     expect(app).toContain('path="/guide/dzaglis-ayvana"');
     expect(app).toContain('path="/guide/dakarguli-cxoveli"');
     expect(app).toContain('path="/guide/miusafari-cxovelis-daxmareba"');
+    expect(read('src/components/BottomNav.tsx')).toContain('to="/guide"');
+    expect(read('src/components/AnimalTip.tsx')).toContain("translate(body.fact, 'ka')");
     expect(vercel).toContain('"destination": "/api/sitemap"');
     expect(vercel).toContain('"destination": "/api/pet-share?id=:id"');
     expect(read('api/sitemap.ts')).toContain('/guide/dzaglis-ayvana');
@@ -53,8 +58,17 @@ describe('ux copy and deploy readiness', () => {
     expect(read('src/components/AnimalTip.tsx')).toContain('catfact.ninja');
     expect(read('src/pages/Index.tsx')).toContain('<AnimalTip />');
     expect(read('src/lib/sharePet.ts')).toContain('t.me/share/url');
-    expect(read('src/pages/PetPage.tsx')).toContain('telegramShareUrl');
+    expect(read('src/lib/sharePet.ts')).toContain('wa.me');
+    expect(read('src/lib/sharePet.ts')).toContain('facebook.com/sharer');
+    expect(read('src/components/WeatherChip.tsx')).toContain('open-meteo.com');
+    expect(read('src/lib/breeds.ts')).toContain('dog.ceo');
+    expect(read('src/lib/breeds.ts')).toContain('thecatapi.com');
+    expect(read('src/pages/AddDog.tsx')).toContain('BreedAutocomplete');
+    expect(read('src/pages/PetPage.tsx')).toContain('SocialShareRow');
+    expect(read('src/pages/PetPage.tsx')).toContain('WeatherChip');
     expect(read('api/notify-telegram.ts')).toContain('api.telegram.org');
+    expect(read('src/contexts/Locale.tsx')).toContain('© 2026 mipove.me');
+    expect(read('src/contexts/Locale.tsx')).not.toContain('PawswipeGeo');
   });
 
   it('keeps the production visitor counter and bank support details', () => {
