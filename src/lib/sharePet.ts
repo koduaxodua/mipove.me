@@ -4,10 +4,15 @@ export function petShareUrl(id: string): string {
   return `${window.location.origin}/pet/${id}`;
 }
 
-/**
- * აზიარებს ცხოველის ლინკს: ჯერ ნატიური share მენიუთი (მობილურზე),
- * თუ არაა — კოპირებს ბუფერში. აბრუნებს რა მოხდა, რომ UI-მ toast აჩვენოს.
- */
+/** უფასო Telegram Share — ტოკენი არ სჭირდება (t.me/share). */
+export function telegramShareUrl(dog: { id: string; name: string }, locale: string): string {
+  const url = petShareUrl(dog.id);
+  const text =
+    locale === 'en' ? `Help ${dog.name} find a home 🐾` : `დაეხმარე ${dog.name}-ს ოჯახის პოვნაში 🐾`;
+  return `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+}
+
+/** ნატიური share ან clipboard კოპირება. */
 export async function sharePetLink(dog: Dog, locale: string): Promise<'shared' | 'copied' | 'dismissed'> {
   const url = petShareUrl(dog.id);
   const title = `${dog.name} — mipove.me`;
@@ -20,7 +25,6 @@ export async function sharePetLink(dog: Dog, locale: string): Promise<'shared' |
       return 'shared';
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') return 'dismissed';
-      // share sheet ვერ გაიხსნა — გადავდივართ კოპირებაზე
     }
   }
 

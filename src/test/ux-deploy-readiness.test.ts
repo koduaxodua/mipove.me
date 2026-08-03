@@ -48,6 +48,14 @@ describe('ux copy and deploy readiness', () => {
     expect(read('index.html')).toContain('application/ld+json');
   });
 
+  it('exposes free public API integrations in the UI', () => {
+    expect(read('src/components/AnimalTip.tsx')).toContain('catfact.ninja');
+    expect(read('src/pages/Index.tsx')).toContain('<AnimalTip />');
+    expect(read('src/lib/sharePet.ts')).toContain('t.me/share/url');
+    expect(read('src/pages/PetPage.tsx')).toContain('telegramShareUrl');
+    expect(read('api/notify-telegram.ts')).toContain('api.telegram.org');
+  });
+
   it('keeps the production visitor counter and bank support details', () => {
     const support = read('src/components/SupportBankDetails.tsx');
     const nav = read('src/components/BottomNav.tsx');

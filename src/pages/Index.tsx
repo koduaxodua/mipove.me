@@ -6,6 +6,7 @@ import { MapSheet } from '@/components/MapSheet';
 import { CardFooterActions } from '@/components/CardFooterActions';
 import { SkeletonCardStack } from '@/components/SkeletonCardStack';
 import { MonthlyVisitors } from '@/components/MonthlyVisitors';
+import { AnimalTip } from '@/components/AnimalTip';
 import { useDogs } from '@/hooks/useDogs';
 import { useLikedDogs } from '@/hooks/useLikedDogs';
 import { RotateCcw, Map } from 'lucide-react';
@@ -171,6 +172,7 @@ export default function Index() {
                 <span className="text-sm font-semibold text-primary">{t('index.action.map')}</span>
               </button>
             </div>
+            <AnimalTip />
           </div>
         </div>
       ) : (

@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Calendar, Heart, MapPin, Phone, Share2, Shield } from 'lucide-react';
 import { AdaptivePetPhoto } from '@/components/AdaptivePetPhoto';
 import { fetchDogById } from '@/hooks/useDogs';
-import { sharePetLink } from '@/lib/sharePet';
+import { sharePetLink, telegramShareUrl } from '@/lib/sharePet';
 import { setCanonical, setNamedMeta, setPropertyMeta } from '@/lib/seo';
 import { toast } from '@/hooks/use-toast';
 import { useLocale, useT } from '@/contexts/Locale';
@@ -212,18 +212,29 @@ export default function PetPage() {
               </a>
             )}
 
-            <div className="flex flex-col gap-2 pt-2 sm:flex-row">
-              <button
-                type="button"
-                onClick={handleShare}
-                className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-primary text-sm font-bold text-primary-foreground transition hover:opacity-90 active:scale-[0.98]"
-              >
-                <Share2 className="h-4 w-4" />
-                {locale === 'en' ? 'Share this profile' : 'პროფილის გაზიარება'}
-              </button>
+            <div className="flex flex-col gap-2 pt-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-primary text-sm font-bold text-primary-foreground transition hover:opacity-90 active:scale-[0.98]"
+                >
+                  <Share2 className="h-4 w-4" />
+                  {locale === 'en' ? 'Share this profile' : 'პროფილის გაზიარება'}
+                </button>
+                <a
+                  href={telegramShareUrl(dog, locale)}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => console.log('[share] telegram', { id: dog.id })}
+                  className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full border border-[#2AABEE]/50 bg-[#2AABEE]/15 text-sm font-semibold text-[#2AABEE] transition hover:bg-[#2AABEE]/25"
+                >
+                  {locale === 'en' ? 'Share on Telegram' : 'გაზიარება Telegram-ზე'}
+                </a>
+              </div>
               <Link
                 to="/"
-                className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-border bg-secondary/70 text-sm font-semibold text-foreground transition hover:bg-secondary"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-secondary/70 text-sm font-semibold text-foreground transition hover:bg-secondary"
               >
                 {locale === 'en' ? 'See more pets' : 'სხვა ცხოველების ნახვა'}
               </Link>
