@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import exifr from 'exifr';
 import { useDogs } from '@/hooks/useDogs';
+import { isPersistedPetId } from '@/hooks/useDeleteRequests';
 import { toast } from '@/hooks/use-toast';
 import { CheckCircle2, Plus, PawPrint, Upload, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -260,11 +261,23 @@ export default function AddDog() {
     setSubmitting(true);
     try {
       const { contactConsent, ...petPayload } = form;
-      await addDog({
+      const newDog = await addDog({
         ...petPayload,
         contactConsentAcknowledgedAt: new Date().toISOString(),
       });
       toast({ title: t('addDog.toast.success', { name: form.name }) });
+
+      // ავტო-პოსტი Telegram არხზე — ირთვება მხოლოდ მაშინ, როცა Vercel-ზე ბოტის ცვლადები დგას.
+      if (isPersistedPetId(newDog.id)) {
+        void fetch('/api/notify-telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ petId: newDog.id }),
+        })
+          .then(res => console.log('[telegram] notify status', res.status))
+          .catch(() => console.warn('[telegram] notify skipped'));
+      }
+
       navigate('/');
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'unknown';
