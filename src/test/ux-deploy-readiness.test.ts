@@ -42,6 +42,7 @@ describe('ux copy and deploy readiness', () => {
     expect(vercel).toContain('"destination": "/api/sitemap"');
     expect(vercel).toContain('"destination": "/api/pet-share?id=:id"');
     expect(read('api/sitemap.ts')).toContain('/guide/dzaglis-ayvana');
+    expect(read('api/sitemap.ts')).toContain("req.method !== 'GET' && req.method !== 'HEAD'");
     expect(read('api/pet-share.ts')).toContain('og:image');
     expect(read('api/notify-telegram.ts')).toContain('TELEGRAM_BOT_TOKEN');
     expect(read('src/pages/AddDog.tsx')).toContain("fetch('/api/notify-telegram'");

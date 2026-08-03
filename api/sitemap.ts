@@ -24,8 +24,9 @@ type PetRow = { id: string; created_at: string };
  * vercel.json აკეთებს rewrite-ს: /sitemap.xml → /api/sitemap
  */
 export default async function handler(req: ApiRequest, res: ApiResponse) {
-  if (req.method !== 'GET') {
-    sendMethodNotAllowed(res, ['GET']);
+  // Googlebot ხშირად ჯერ HEAD-ს ამოწმებს — 405 = "Couldn't fetch" Search Console-ში.
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    sendMethodNotAllowed(res, ['GET', 'HEAD']);
     return;
   }
 
@@ -57,9 +58,14 @@ ${urls.join('\n')}
 </urlset>
 `;
 
-  console.log('[sitemap] generated', { staticPaths: STATIC_PATHS.length, pets: pets.length });
+  console.log('[sitemap] generated', { staticPaths: STATIC_PATHS.length, pets: pets.length, method: req.method });
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
   res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+  if (req.method === 'HEAD') {
+    res.setHeader('Content-Length', Buffer.byteLength(xml, 'utf8'));
+    res.end();
+    return;
+  }
   res.end(xml);
 }
