@@ -12,6 +12,7 @@ const STATIC_PATHS = [
   '/2/about',
   '/2/safety',
   '/2/how-it-works',
+  '/guide',
   '/guide/dzaglis-ayvana',
   '/guide/dakarguli-cxoveli',
   '/guide/miusafari-cxovelis-daxmareba',

@@ -10,8 +10,10 @@ describe('ux copy and deploy readiness', () => {
     const source = read('src/components/BottomNav.tsx');
 
     expect(source).toContain("t('footer.copyright')");
-    expect(source).toContain("to=\"/terms\"");
-    expect(source).toContain("to=\"/ka/privacy\"");
+    expect(source).toContain("t('footer.guides')");
+    expect(source).toContain('to="/guide"');
+    expect(source).toContain('to="/terms"');
+    expect(source).toContain('to="/ka/privacy"');
   });
 
   it('uses npm-based Vercel build defaults compatible with this repository', () => {
@@ -36,9 +38,12 @@ describe('ux copy and deploy readiness', () => {
     const vercel = read('vercel.json');
 
     expect(app).toContain('path="/pet/:id"');
+    expect(app).toContain('path="/guide"');
     expect(app).toContain('path="/guide/dzaglis-ayvana"');
     expect(app).toContain('path="/guide/dakarguli-cxoveli"');
     expect(app).toContain('path="/guide/miusafari-cxovelis-daxmareba"');
+    expect(read('src/components/BottomNav.tsx')).toContain('to="/guide"');
+    expect(read('src/components/AnimalTip.tsx')).toContain("translate(body.fact, 'ka')");
     expect(vercel).toContain('"destination": "/api/sitemap"');
     expect(vercel).toContain('"destination": "/api/pet-share?id=:id"');
     expect(read('api/sitemap.ts')).toContain('/guide/dzaglis-ayvana');

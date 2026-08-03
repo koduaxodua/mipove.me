@@ -221,8 +221,10 @@ const TRANSLATIONS = {
   'common.loading':         { ka: 'იტვირთება...', en: 'Loading...' },
   'common.error':           { ka: 'შეცდომა', en: 'Error' },
   'footer.copyright':       { ka: '© 2026 PawswipeGeo. ყველა უფლება დაცულია.', en: '© 2026 PawswipeGeo. All rights reserved.' },
+  'footer.guides':          { ka: 'გზამკვლევები', en: 'Guides' },
   'footer.terms':           { ka: 'პირობები', en: 'Terms' },
   'footer.privacy':         { ka: 'კონფიდენციალურობა', en: 'Privacy' },
+  'index.guides.cta':       { ka: 'გზამკვლევების ნახვა', en: 'Browse guides' },
 
   // Ad banner
   'ad.skipIn':              { ka: 'რეკლამა · გამოტოვება {seconds} წმ-ში', en: 'Ad · skip in {seconds}s' },

@@ -5,7 +5,7 @@ import { useLocale } from '@/contexts/Locale';
 import { setCanonical, setPropertyMeta } from '@/lib/seo';
 
 const ENGLISH_ROUTES = new Set(['/2', '/2/about', '/2/safety', '/2/how-it-works']);
-const GUIDE_ROUTES = new Set(['/guide/dzaglis-ayvana', '/guide/dakarguli-cxoveli', '/guide/miusafari-cxovelis-daxmareba']);
+const GUIDE_ROUTES = new Set(['/guide', '/guide/dzaglis-ayvana', '/guide/dakarguli-cxoveli', '/guide/miusafari-cxovelis-daxmareba']);
 const INDEXABLE_ROUTES = new Set(['/', '/about', '/safety', '/how-it-works', '/2', '/2/about', '/2/safety', '/2/how-it-works', '/app', ...GUIDE_ROUTES]);
 const CANONICAL_ORIGIN = 'https://mipove.me';
 
@@ -52,6 +52,11 @@ const pageMeta: Record<string, { title: string; description: string }> = {
   '/app': {
     title: 'mipove.me app - Georgian pet rescue listings',
     description: 'Browse Georgian pet rescue listings, save profiles, and open approximate map locations.',
+  },
+  '/guide': {
+    title: 'გზამკვლევები — ცხოველების დახმარება საქართველოში | mipove.me',
+    description:
+      'პრაქტიკული ქართული გზამკვლევები: ძაღლის/კატის აყვანა, დაკარგული ცხოველი და მიუსაფარის დახმარება.',
   },
   '/guide/dzaglis-ayvana': {
     title: 'როგორ ავიყვანო ძაღლი ან კატა საქართველოში — გზამკვლევი | mipove.me',

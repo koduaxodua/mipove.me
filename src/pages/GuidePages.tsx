@@ -6,10 +6,51 @@ import { ManualAdSlot } from './ContentPagesV2';
 const CONTENT_AD_SLOT = import.meta.env.VITE_ADSENSE_CONTENT_SLOT || '';
 
 const GUIDES = [
-  { path: '/guide/dzaglis-ayvana', label: 'როგორ ავიყვანო ძაღლი ან კატა' },
-  { path: '/guide/dakarguli-cxoveli', label: 'დაკარგული ცხოველი — პირველი 24 საათი' },
-  { path: '/guide/miusafari-cxovelis-daxmareba', label: 'როგორ დავეხმარო მიუსაფარ ცხოველს' },
+  {
+    path: '/guide/dzaglis-ayvana',
+    label: 'როგორ ავიყვანო ძაღლი ან კატა',
+    blurb: 'სად ვიპოვო გასაჩუქებელი ცხოველი, რა მოვამზადო სახლში და რა ხარჯებს უნდა ელოდო.',
+  },
+  {
+    path: '/guide/dakarguli-cxoveli',
+    label: 'დაკარგული ცხოველი — პირველი 24 საათი',
+    blurb: 'პრაქტიკული გეგმა: სად ეძებო, როგორ გაავრცელო განცხადება და როგორ აირიდო თაღლითები.',
+  },
+  {
+    path: '/guide/miusafari-cxovelis-daxmareba',
+    label: 'როგორ დავეხმარო მიუსაფარ ცხოველს',
+    blurb: 'კვება, ვეტერინარი, დროებითი შეკედლება და განცხადების დამატება mipove.me-ზე.',
+  },
 ];
+
+/** /guide — სამივე სტატიის სია (აპიდან და Google-იდან მოსასვლელი გვერდი). */
+export function GuideHubPage() {
+  return (
+    <GuideShell current="/guide">
+      <H1>გზამკვლევები — ცხოველების დახმარება საქართველოში</H1>
+      <P>
+        მოკლე, პრაქტიკული სტატიები: აყვანა, დაკარგული ცხოველი და მიუსაფარის დახმარება. აირჩიე თემა და
+        წაიკითხე ნაბიჯ-ნაბიჯ.
+      </P>
+      <div className="mt-8 space-y-3">
+        {GUIDES.map(guide => (
+          <Link
+            key={guide.path}
+            to={guide.path}
+            className="block rounded-2xl border border-border/70 bg-card/70 p-5 transition hover:border-primary/40"
+          >
+            <span className="block text-base font-semibold text-foreground">{guide.label}</span>
+            <span className="mt-1 block text-sm leading-6 text-muted-foreground">{guide.blurb}</span>
+            <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+              წაკითხვა <ArrowRight className="h-4 w-4" />
+            </span>
+          </Link>
+        ))}
+      </div>
+      <GuideCta />
+    </GuideShell>
+  );
+}
 
 /**
  * ქართული SEO სტატიები — ამ გვერდებზე მოდის ტრაფიკი Google-იდან
@@ -20,11 +61,11 @@ function GuideShell({ current, children }: { current: string; children: ReactNod
     <main className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
-          <Link to="/" className="flex items-center gap-3">
+          <Link to="/guide" className="flex items-center gap-3">
             <img src="/brand/logo-dark.png" alt="mipove.me" className="h-10 w-10 rounded-2xl object-contain" />
             <div className="leading-tight">
               <span className="block text-base font-bold">mipove.me</span>
-              <span className="text-xs text-muted-foreground">ცხოველების განცხადებები საქართველოში</span>
+              <span className="text-xs text-muted-foreground">გზამკვლევები</span>
             </div>
           </Link>
           <Link
@@ -42,6 +83,11 @@ function GuideShell({ current, children }: { current: string; children: ReactNod
         <div className="mx-auto max-w-3xl">
           <p className="text-sm font-semibold text-foreground">სხვა გზამკვლევები</p>
           <div className="mt-3 flex flex-col gap-2 text-sm">
+            {current !== '/guide' && (
+              <Link to="/guide" className="text-muted-foreground underline underline-offset-2 hover:text-foreground">
+                ყველა გზამკვლევი
+              </Link>
+            )}
             {GUIDES.filter(guide => guide.path !== current).map(guide => (
               <Link
                 key={guide.path}
