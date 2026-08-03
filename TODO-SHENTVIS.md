@@ -87,9 +87,7 @@ git clone https://github.com/koduaxodua/mipove.me.git
 
 ## უფასო API-ები (უკვე ჩაშენებული)
 
-
 - **Telegram Bot API** — ახალი ცხოველის ავტო-პოსტი არხზე (ნაბიჯი 3-ის შემდეგ)
-- **Telegram Share** (`t.me/share`) — ცხოველის გვერ� არხზე (ნაბიჯი 3-ის შემდეგ)
 - **Telegram Share** (`t.me/share`) — ცხოველის გვერდზე ლურჯი ღილაკი, ტოკენის გარეშე
 - **OpenStreetMap + Nominatim** — რუკა და მისამართის ძებნა
 - **catfact.ninja** — სვაიპის ბოლოს „ცნობისთვის" (public-apis სიიდან)
