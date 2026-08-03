@@ -2,9 +2,12 @@
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, HeartHandshake, MapPin, ShieldCheck, Search, PawPrint } from 'lucide-react';
 import { useLocale } from '@/contexts/Locale';
+import { setCanonical, setPropertyMeta } from '@/lib/seo';
 
 const ENGLISH_ROUTES = new Set(['/2', '/2/about', '/2/safety', '/2/how-it-works']);
-const INDEXABLE_ROUTES = new Set(['/', '/about', '/safety', '/how-it-works', '/2', '/2/about', '/2/safety', '/2/how-it-works', '/app']);
+const GUIDE_ROUTES = new Set(['/guide/dzaglis-ayvana', '/guide/dakarguli-cxoveli', '/guide/miusafari-cxovelis-daxmareba']);
+const INDEXABLE_ROUTES = new Set(['/', '/about', '/safety', '/how-it-works', '/2', '/2/about', '/2/safety', '/2/how-it-works', '/app', ...GUIDE_ROUTES]);
+const CANONICAL_ORIGIN = 'https://mipove.me';
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   '/': {
@@ -50,6 +53,21 @@ const pageMeta: Record<string, { title: string; description: string }> = {
     title: 'mipove.me app - Georgian pet rescue listings',
     description: 'Browse Georgian pet rescue listings, save profiles, and open approximate map locations.',
   },
+  '/guide/dzaglis-ayvana': {
+    title: 'როგორ ავიყვანო ძაღლი ან კატა საქართველოში — გზამკვლევი | mipove.me',
+    description:
+      'ნაბიჯ-ნაბიჯ გზამკვლევი: სად ვიპოვო გასაჩუქებელი ძაღლი ან კატა, რა მოვამზადო სახლში, ვაქცინაცია, სტერილიზაცია და მიახლოებითი ხარჯები.',
+  },
+  '/guide/dakarguli-cxoveli': {
+    title: 'დაკარგული ძაღლი ან კატა — რა გავაკეთო პირველ 24 საათში | mipove.me',
+    description:
+      'პრაქტიკული გეგმა დაკარგული ცხოველის საპოვნელად: სად ეძებო, როგორ გაავრცელო განცხადება, მიკროჩიპი და როგორ აირიდო თაღლითები.',
+  },
+  '/guide/miusafari-cxovelis-daxmareba': {
+    title: 'როგორ დავეხმარო მიუსაფარ ცხოველს — პრაქტიკული გზამკვლევი | mipove.me',
+    description:
+      'რა გავაკეთო, როცა ქუჩაში მიუსაფარ ან დაშავებულ ძაღლს/კატას ვხედავ: კვება, ვეტერინარი, დროებითი შეკედლება და განცხადების დამატება.',
+  },
 };
 
 export function SeoGuard() {
@@ -57,10 +75,20 @@ export function SeoGuard() {
   const { locale } = useLocale();
 
   useEffect(() => {
-    const indexable = INDEXABLE_ROUTES.has(pathname);
+    // /pet/:id გვერდები title/description/og-ს თავად აყენებენ (PetPage),
+    // აქ მხოლოდ ინდექსაციას ვრთავთ მათთვის.
+    const isPetPage = pathname.startsWith('/pet/');
+    const indexable = INDEXABLE_ROUTES.has(pathname) || isPetPage;
     const meta = pageMeta[pathname] ?? pageMeta['/'];
-    document.title = indexable ? meta.title : 'mipove.me';
-    document.documentElement.lang = ENGLISH_ROUTES.has(pathname) ? 'en' : pathname.startsWith('/ka') ? 'ka' : locale;
+
+    if (!isPetPage) {
+      document.title = indexable ? meta.title : 'mipove.me';
+    }
+    document.documentElement.lang = ENGLISH_ROUTES.has(pathname)
+      ? 'en'
+      : pathname.startsWith('/ka') || GUIDE_ROUTES.has(pathname)
+        ? 'ka'
+        : locale;
 
     let robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
     if (!robots) {
@@ -70,8 +98,19 @@ export function SeoGuard() {
     }
     robots.content = indexable ? 'index,follow' : 'noindex,follow';
 
-    const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
-    if (description && indexable) description.content = meta.description;
+    // canonical + og ყოველ როუტზე მიჰყვება მისამართს (/app იგივე კონტენტია, რაც /)
+    const canonicalPath = pathname === '/app' ? '/' : pathname;
+    setCanonical(`${CANONICAL_ORIGIN}${canonicalPath}`);
+
+    if (!isPetPage) {
+      setPropertyMeta('og:url', `${CANONICAL_ORIGIN}${canonicalPath}`);
+      if (indexable) {
+        setPropertyMeta('og:title', meta.title);
+        setPropertyMeta('og:description', meta.description);
+        const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+        if (description) description.content = meta.description;
+      }
+    }
   }, [locale, pathname]);
 
   return null;

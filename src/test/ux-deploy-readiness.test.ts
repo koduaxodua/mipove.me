@@ -31,6 +31,23 @@ describe('ux copy and deploy readiness', () => {
     expect(readme).toContain('ADMIN_SESSION_SECRET');
   });
 
+  it('serves SEO surfaces: pet pages, guides, sitemap, and social previews', () => {
+    const app = read('src/App.tsx');
+    const vercel = read('vercel.json');
+
+    expect(app).toContain('path="/pet/:id"');
+    expect(app).toContain('path="/guide/dzaglis-ayvana"');
+    expect(app).toContain('path="/guide/dakarguli-cxoveli"');
+    expect(app).toContain('path="/guide/miusafari-cxovelis-daxmareba"');
+    expect(vercel).toContain('"destination": "/api/sitemap"');
+    expect(vercel).toContain('"destination": "/api/pet-share?id=:id"');
+    expect(read('api/sitemap.ts')).toContain('/guide/dzaglis-ayvana');
+    expect(read('api/pet-share.ts')).toContain('og:image');
+    expect(read('api/notify-telegram.ts')).toContain('TELEGRAM_BOT_TOKEN');
+    expect(read('src/pages/AddDog.tsx')).toContain("fetch('/api/notify-telegram'");
+    expect(read('index.html')).toContain('application/ld+json');
+  });
+
   it('keeps the production visitor counter and bank support details', () => {
     const support = read('src/components/SupportBankDetails.tsx');
     const nav = read('src/components/BottomNav.tsx');

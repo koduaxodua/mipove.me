@@ -12,6 +12,11 @@
     <meta name="description" content="იპოვე, გააზიარე ან დაამატე მიუსაფარი, დაკარგული და გასაჩუქებელი ცხოველის განცხადება საქართველოში." />
     <link rel="canonical" href="https://mipove.me/" />
 
+    <!-- Structured data for Google -->
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"WebSite","name":"mipove.me","alternateName":"მიპოვე","url":"https://mipove.me/","inLanguage":["ka","en"],"description":"მიუსაფარი, დაკარგული და გასაჩუქებელი ცხოველების განცხადებები საქართველოში.","publisher":{"@type":"Organization","name":"mipove.me","url":"https://mipove.me/","logo":"https://mipove.me/brand/logo-dark.png"}}
+    </script>
+
     <!-- Open Graph (Facebook, LinkedIn, Discord, Slack, WhatsApp, iMessage, Telegram, etc.) -->
     <meta property="og:site_name" content="mipove.me" />
     <meta property="og:title" content="mipove.me - იპოვე და დაეხმარე ცხოველს" />
@@ -53,7 +58,7 @@
         ad_personalization: 'denied'
       });
 
-      window.__MIPOVE_ADS_ALLOWED_PATHS__ = ['/2', '/2/about', '/2/safety', '/2/how-it-works'];
+      window.__MIPOVE_ADS_ALLOWED_PATHS__ = ['/2', '/2/about', '/2/safety', '/2/how-it-works', '/guide/dzaglis-ayvana', '/guide/dakarguli-cxoveli', '/guide/miusafari-cxovelis-daxmareba'];
 
       window.__mipoveCanLoadAds = function () {
         return window.__MIPOVE_ADS_ALLOWED_PATHS__.includes(window.location.pathname);

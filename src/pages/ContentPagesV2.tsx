@@ -301,7 +301,7 @@ function ContentShell({ children }: { children: ReactNode }) {
   );
 }
 
-function ManualAdSlot({ slot }: { slot: string }) {
+export function ManualAdSlot({ slot }: { slot: string }) {
   useEffect(() => {
     if (!slot || !window.__mipoveCanLoadAds?.()) return;
     try {

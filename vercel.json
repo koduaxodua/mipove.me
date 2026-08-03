@@ -5,6 +5,18 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    {
+      "source": "/pet/:id",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|Facebot|Twitterbot|TelegramBot|WhatsApp|LinkedInBot|Slackbot|Discordbot|Viber|Pinterestbot|vkShare|SkypeUriPreview).*"
+        }
+      ],
+      "destination": "/api/pet-share?id=:id"
+    },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "crons": [
