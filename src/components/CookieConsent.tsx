@@ -8,12 +8,12 @@ import {
   type PrivacyConsentChoice,
 } from '@/lib/privacyConsent';
 
-const ADS_ALLOWED_PATHS = new Set(['/2', '/2/about', '/2/safety', '/2/how-it-works']);
+const ADS_ALLOWED_PATHS = new Set(['/2', '/2/about', '/2/safety', '/2/how-it-works', '/guide/dzaglis-ayvana', '/guide/dakarguli-cxoveli', '/guide/miusafari-cxovelis-daxmareba']);
 
 export function CookieConsent() {
   const { pathname } = useLocation();
   const allowAds = ADS_ALLOWED_PATHS.has(pathname);
-  const englishUi = allowAds;
+  const englishUi = pathname.startsWith('/2');
   const [choice, setChoice] = useState<PrivacyConsentChoice | null>(() =>
     typeof window === 'undefined' ? null : getPrivacyConsent()
   );
