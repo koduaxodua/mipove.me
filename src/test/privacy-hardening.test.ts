@@ -240,6 +240,9 @@ describe('privacy/security hardening', () => {
     expect(cardFooter).toContain('onLike');
     expect(cardFooter).toContain('onMap');
     expect(cardFooter).toContain('onNope');
+    expect(cardFooter).toContain('rounded-full');
+    expect(cardFooter).toContain('h-[60px]');
+    expect(cardFooter).not.toContain('grid-cols-3');
     expect(tutorial).toContain('pawswipe_tutorial_seen_v2');
     expect(skeleton).toContain('[2, 1, 0]');
     expect(swipeCard).toContain('caretakerPhone');
