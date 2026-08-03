@@ -8,9 +8,8 @@ const INDEXABLE_ROUTES = new Set(['/', '/about', '/safety', '/how-it-works', '/2
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   '/': {
-    title: 'mipove.me - Find and help homeless pets in Georgia',
-    description:
-      'mipove.me helps people in Georgia share, find, and safely contact each other about homeless, lost, or adoptable pets.',
+    title: 'mipove.me app - Georgian pet rescue listings',
+    description: 'Browse Georgian pet rescue listings, save profiles, and open approximate map locations.',
   },
   '/about': {
     title: 'About mipove.me - Pet rescue information platform',

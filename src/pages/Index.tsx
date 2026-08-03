@@ -5,6 +5,7 @@ import { DogDetailSheet } from '@/components/DogDetailSheet';
 import { MapSheet } from '@/components/MapSheet';
 import { CardFooterActions } from '@/components/CardFooterActions';
 import { SkeletonCardStack } from '@/components/SkeletonCardStack';
+import { MonthlyVisitors } from '@/components/MonthlyVisitors';
 import { useDogs } from '@/hooks/useDogs';
 import { useLikedDogs } from '@/hooks/useLikedDogs';
 import { RotateCcw, Map } from 'lucide-react';
@@ -126,6 +127,7 @@ export default function Index() {
         <div className="flex min-w-0 -translate-x-1 translate-y-5 flex-col leading-tight sm:translate-y-4">
           <span className="text-base sm:text-lg font-bold text-foreground truncate">{t('app.title')}</span>
           <span className="whitespace-nowrap text-[9px] text-muted-foreground sm:text-[11px]">{t('app.tagline')}</span>
+          <MonthlyVisitors />
         </div>
       </div>
 

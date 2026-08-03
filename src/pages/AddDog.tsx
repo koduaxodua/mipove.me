@@ -34,6 +34,22 @@ const compressImage = (file: File, maxWidth = 800, quality = 0.7): Promise<strin
   });
 };
 
+const HEIC_NAME_RE = /\.(heic|heif)$/i;
+
+const isImageFile = (file: File) => file.type.startsWith('image/') || HEIC_NAME_RE.test(file.name);
+
+const isHeicFile = (file: File) => /image\/hei[cf]/i.test(file.type) || HEIC_NAME_RE.test(file.name);
+
+/** iPhone-ის HEIC ფოტოს გარდაქმნის JPEG-ად; სხვა ფაილებს უცვლელად აბრუნებს. */
+const convertHeicToJpeg = async (file: File): Promise<File> => {
+  if (!isHeicFile(file)) return file;
+  console.log('[add-pet] converting HEIC photo');
+  const { default: heic2any } = await import('heic2any');
+  const converted = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.88 });
+  const blob = Array.isArray(converted) ? converted[0] : converted;
+  return new File([blob], file.name.replace(HEIC_NAME_RE, '.jpg'), { type: 'image/jpeg' });
+};
+
 /**
  * Extract GPS coordinates from a photo's EXIF.
  *
@@ -161,7 +177,7 @@ export default function AddDog() {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (!file.type.startsWith('image/')) {
+    if (!isImageFile(file)) {
       toast({ title: t('addDog.toast.notImage'), variant: 'destructive' });
       return;
     }
@@ -171,8 +187,10 @@ export default function AddDog() {
     }
     setUploading(true);
     try {
-      // Run compression and EXIF parsing in parallel — both work off the same file.
-      const [compressed, gps] = await Promise.all([compressImage(file), extractPhotoGps(file)]);
+      // HEIC ჯერ გარდაიქმნება JPEG-ად; GPS ორიგინალი ფაილიდან იკითხება (კონვერტაცია EXIF-ს შლის).
+      const source = await convertHeicToJpeg(file);
+      // Run compression and EXIF parsing in parallel.
+      const [compressed, gps] = await Promise.all([compressImage(source), extractPhotoGps(file)]);
 
       const sizeKB = Math.round((compressed.length * 3) / 4 / 1024);
 

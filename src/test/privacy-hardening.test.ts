@@ -72,14 +72,14 @@ describe('privacy/security hardening', () => {
     expect(read('src/pages/Terms.tsx')).toContain('/ka/privacy');
   });
 
-  it('keeps the previous homepage on root and moves the English ad content to /2', () => {
+  it('serves the swipe app on root and keeps the English ad content on /2', () => {
     const app = read('src/App.tsx');
     const homepage = read('src/pages/ContentPages.tsx');
     const homepageV2 = read('src/pages/ContentPagesV2.tsx');
     const nav = read('src/components/BottomNav.tsx');
     const html = read('index.html');
 
-    expect(app).toContain('path="/" element={<HomePage />}');
+    expect(app).toContain('path="/" element={<Index />}');
     expect(app).toContain('path="/app" element={<Index />}');
     expect(app).toContain('path="/about" element={<AboutPage />}');
     expect(app).toContain('path="/safety" element={<SafetyPage />}');
@@ -89,9 +89,9 @@ describe('privacy/security hardening', () => {
     expect(app).toContain('path="/2/safety" element={<SafetyPageV2 />}');
     expect(app).toContain('path="/2/how-it-works" element={<HowItWorksPageV2 />}');
     expect(app).toContain('path="/ka" element={<GeorgianLandingPage />}');
-    expect(nav).toContain("path: '/app'");
-    expect(html).toContain('<html lang="en">');
-    expect(html).toContain('Find and help homeless pets in Georgia');
+    expect(nav).toContain("path: '/'");
+    expect(html).toContain('<html lang="ka">');
+    expect(html).toContain('იპოვე და დაეხმარე ცხოველს');
     expect(homepage).toContain('იპოვე ან დაამატე ცხოველი.');
     expect(homepage).toContain('აპის გახსნა');
     expect(homepageV2).toContain('Georgian pet rescue community');
@@ -236,7 +236,7 @@ describe('privacy/security hardening', () => {
 
     expect(georgianLanding).toContain('to="/app"');
     expect(georgianLanding).toContain('to="/add"');
-    expect(georgianLanding).toContain('to="/missions"');
+    expect(georgianLanding).not.toContain('to="/missions"');
     expect(cardFooter).toContain('onLike');
     expect(cardFooter).toContain('onMap');
     expect(cardFooter).toContain('onNope');
