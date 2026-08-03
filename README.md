@@ -58,6 +58,15 @@ ADMIN_PASSWORD_HASH=pbkdf2_sha256$210000$<salt>$<derived-hash>
 ADMIN_SESSION_SECRET=<at-least-32-random-characters>
 ```
 
+არასავალდებულო ინტეგრაციები (თუ არ დგას, ფუნქცია უბრალოდ გამორთულია):
+
+```env
+TELEGRAM_BOT_TOKEN=<BotFather-ის ტოკენი — ახალი ცხოველის ავტო-პოსტი არხზე>
+TELEGRAM_CHANNEL_ID=@your_channel
+VITE_ADSENSE_CONTENT_SLOT=<AdSense სარეკლამო ერთეულის slot id>
+VERCEL_ANALYTICS_TOKEN=<ვიზიტორების მთვლელისთვის>
+```
+
 ### Deploy ნაბიჯები (Dashboard რეკომენდებული)
 
 1. Vercel → **Import Project** → აირჩიე GitHub repo `koduaxodua/mipove.me`

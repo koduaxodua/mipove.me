@@ -108,7 +108,7 @@ describe('privacy/security hardening', () => {
 
     expect(index).not.toContain('AdBanner');
     expect(index).not.toContain('showAd');
-    expect(consent).toContain("['/2', '/2/about', '/2/safety', '/2/how-it-works']");
+    expect(consent).toContain("['/2', '/2/about', '/2/safety', '/2/how-it-works', '/guide/dzaglis-ayvana', '/guide/dakarguli-cxoveli', '/guide/miusafari-cxovelis-daxmareba']");
     expect(consent).toContain('options: { allowAds?: boolean }');
     expect(consent).toContain('window.__mipoveLoadAdsense?.()');
     expect(html).toContain('__mipoveCanLoadAds');
