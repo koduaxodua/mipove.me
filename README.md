@@ -1,6 +1,6 @@
-# Pet Rescue Georgia
+# mipove.me
 
-მიუსაფარი ძაღლებისა და კატების მიკედლების პლატფორმა საქართველოში — სვაიპის სტილის აპი [Pet Rescue Georgia](https://www.facebook.com/profile.php?id=61566471334047)-სთვის.
+მიუსაფარი ძაღლებისა და კატების დასახმარებელი სვაიპის სტილის აპი საქართველოში.
 
 ## 🛠 ტექნოლოგიები
 
@@ -60,7 +60,7 @@ ADMIN_SESSION_SECRET=<at-least-32-random-characters>
 
 ### Deploy ნაბიჯები (Dashboard რეკომენდებული)
 
-1. Vercel → **Import Project** → აირჩიე GitHub repo `koduaxodua/pawswipegeo`
+1. Vercel → **Import Project** → აირჩიე GitHub repo `koduaxodua/mipove.me`
 2. Framework იქნება auto-detected როგორც **Vite**
 3. Build config:
    - Install Command: `npm ci`

@@ -1,13 +1,18 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Heart, PawPrint, Plus, FileText, Trophy } from 'lucide-react';
+import { Heart, PawPrint, Plus, FileText } from 'lucide-react';
 import { useT, type TKey } from '@/contexts/Locale';
+import { SupportBankDetails } from '@/components/SupportBankDetails';
 
-const navItems: { path: string; icon: typeof PawPrint; labelKey: TKey }[] = [
-  { path: '/app', icon: PawPrint, labelKey: 'nav.swipe' },
-  { path: '/favorites', icon: Heart, labelKey: 'nav.favorites' },
-  { path: '/add', icon: Plus, labelKey: 'nav.add' },
-  { path: '/missions', icon: Trophy, labelKey: 'nav.missions' },
-  { path: '/terms', icon: FileText, labelKey: 'nav.terms' },
+type NavItem =
+  | { type: 'route'; path: string; icon: typeof PawPrint; labelKey: TKey }
+  | { type: 'support' };
+
+const navItems: NavItem[] = [
+  { type: 'route', path: '/', icon: PawPrint, labelKey: 'nav.swipe' },
+  { type: 'route', path: '/favorites', icon: Heart, labelKey: 'nav.favorites' },
+  { type: 'route', path: '/add', icon: Plus, labelKey: 'nav.add' },
+  { type: 'support' },
+  { type: 'route', path: '/terms', icon: FileText, labelKey: 'nav.terms' },
 ];
 
 export function BottomNav() {
@@ -18,7 +23,7 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 glass-strong border-t border-border/50 safe-area-bottom">
-      <div className="mx-auto flex w-full max-w-lg items-center justify-between gap-2 border-b border-border/40 px-3 py-1.5 text-[10px] text-muted-foreground">
+      <div className="mx-auto hidden w-full max-w-lg items-center justify-between gap-2 border-b border-border/40 px-3 py-1.5 text-[10px] text-muted-foreground sm:flex">
         <span className="truncate">{t('footer.copyright')}</span>
         <div className="flex items-center gap-2">
           <Link to="/terms" className="underline-offset-2 hover:text-foreground hover:underline">
@@ -33,14 +38,13 @@ export function BottomNav() {
       </div>
       <div className="flex items-center justify-around max-w-lg mx-auto h-[58px] px-2">
         {navItems.map(item => {
+          if (item.type === 'support') return <SupportBankDetails key="support" />;
+
           const isActive = location.pathname === item.path;
-          const handleClick = () => {
-            navigate(item.path);
-          };
           return (
             <button
               key={item.path}
-              onClick={handleClick}
+              onClick={() => navigate(item.path)}
               aria-current={isActive ? 'page' : undefined}
               className={`min-h-11 min-w-11 flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all duration-200 ${
                 isActive

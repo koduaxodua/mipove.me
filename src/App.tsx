@@ -12,13 +12,12 @@ import { LocaleProvider } from "@/contexts/Locale";
 import Index from "./pages/Index";
 import Favorites from "./pages/Favorites";
 import AddDog from "./pages/AddDog";
-import Missions from "./pages/Missions";
 import Terms from "./pages/Terms";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import PrivacyKa from "./pages/PrivacyKa";
 import NotFound from "./pages/NotFound";
-import { HomePage, AboutPage, SafetyPage, HowItWorksPage, SeoGuard } from "./pages/ContentPages";
+import { AboutPage, SafetyPage, HowItWorksPage, SeoGuard } from "./pages/ContentPages";
 import { GeorgianLandingPage } from "./pages/GeorgianLandingPage";
 import {
   HomePage as HomePageV2,
@@ -29,7 +28,7 @@ import {
 
 const queryClient = new QueryClient();
 
-const APP_CHROME_ROUTES = ['/app', '/favorites', '/add', '/missions', '/terms', '/ka/privacy'];
+const APP_CHROME_ROUTES = ['/', '/app', '/favorites', '/add', '/terms', '/ka/privacy'];
 
 function AppChrome() {
   const { pathname } = useLocation();
@@ -42,7 +41,7 @@ function AppChrome() {
           <BottomNav />
           <TopLeftBrand />
           <TopRightLogo />
-          {pathname === '/app' && <SwipeTutorialV2 />}
+          {['/', '/app'].includes(pathname) && <SwipeTutorialV2 />}
         </>
       )}
       <CookieConsent />
@@ -59,7 +58,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<Index />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/safety" element={<SafetyPage />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
@@ -71,7 +70,6 @@ const App = () => (
             <Route path="/app" element={<Index />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/add" element={<AddDog />} />
-            <Route path="/missions" element={<Missions />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/ka/privacy" element={<PrivacyKa />} />
             <Route path="/admin-login" element={<AdminLogin />} />

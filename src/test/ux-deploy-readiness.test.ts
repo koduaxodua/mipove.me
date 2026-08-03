@@ -30,4 +30,18 @@ describe('ux copy and deploy readiness', () => {
     expect(readme).toContain('SUPABASE_SERVICE_ROLE_KEY');
     expect(readme).toContain('ADMIN_SESSION_SECRET');
   });
+
+  it('keeps the production visitor counter and bank support details', () => {
+    const support = read('src/components/SupportBankDetails.tsx');
+    const nav = read('src/components/BottomNav.tsx');
+    const visitors = read('src/components/MonthlyVisitors.tsx');
+
+    expect(support).toContain('GE81BG0000000604690174');
+    expect(support).toContain('Bank of Georgia');
+    expect(nav).toContain('SupportBankDetails');
+    expect(nav).not.toContain('/missions');
+    expect(visitors).toContain("fetch('/api/visitor-count')");
+    expect(read('src/pages/Index.tsx')).toContain('<MonthlyVisitors />');
+    expect(read('api/visitor-count.ts')).toContain('VERCEL_ANALYTICS_TOKEN');
+  });
 });
