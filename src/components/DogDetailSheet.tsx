@@ -77,12 +77,12 @@ export function DogDetailSheet({ dog: rawDog, open, onOpenChange, onShowOnMap }:
     try {
       const result = await sharePetStoryCard(dog, locale);
       if (result === 'downloaded') {
-        toast({ title: locale === 'en' ? 'Story card downloaded' : 'სტორის ბარათი ჩამოიტვირთა' });
+        toast({ title: locale === 'en' ? 'Story card downloaded' : 'სთორის სურათი ჩამოიტვირთა' });
       }
     } catch {
       toast({
         title: t('common.error'),
-        description: locale === 'en' ? 'Could not create the story card.' : 'სტორის ბარათის შექმნა ვერ მოხერხდა.',
+        description: locale === 'en' ? 'Could not create the story card.' : 'სთორის სურათის შექმნა ვერ მოხერხდა.',
         variant: 'destructive',
       });
     }
@@ -175,7 +175,7 @@ export function DogDetailSheet({ dog: rawDog, open, onOpenChange, onShowOnMap }:
               className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E4405F]/45 bg-[#E4405F]/10 px-4 py-3 text-sm font-semibold text-foreground transition hover:bg-[#E4405F]/15 active:scale-[0.99]"
             >
               <Instagram className="h-4 w-4 text-[#E4405F]" />
-              {locale === 'en' ? 'Share story card' : 'სტორის ბარათის გაზიარება'}
+              {locale === 'en' ? 'Share story card' : 'სთორის გაზიარება'}
             </button>
 
             {isPersistedPetId(dog.id) && (

@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Map, X } from 'lucide-react';
+import { useLocale } from '@/contexts/Locale';
 
-const TUTORIAL_KEY = 'pawswipe_tutorial_seen_v2';
+const TUTORIAL_KEY = 'pawswipe_tutorial_seen_v3';
 
 export function SwipeTutorialV2() {
+  const { locale } = useLocale();
   const [open, setOpen] = useState(() =>
     typeof window !== 'undefined' && !localStorage.getItem(TUTORIAL_KEY)
   );
@@ -13,6 +15,8 @@ export function SwipeTutorialV2() {
     localStorage.setItem(TUTORIAL_KEY, '1');
     setOpen(false);
   };
+
+  const isEnglish = locale === 'en';
 
   if (!open) return null;
 
@@ -31,32 +35,38 @@ export function SwipeTutorialV2() {
           animate={{ y: 0, scale: 1 }}
           onPointerDown={event => event.stopPropagation()}
         >
-          <h2 className="text-xl font-bold">გადასვი ან გამოიყენე ღილაკები</h2>
+          <h2 className="text-xl font-bold">{isEnglish ? 'How it works' : 'როგორ გამოიყენო'}</h2>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            მარჯვნივ მოწონებაა, მარცხნივ გამოტოვება, რუკა კი ცხოველის მიახლოებით ადგილს გაჩვენებს.
+            {isEnglish
+              ? 'Swipe left to skip, or swipe right to save a pet. The buttons below do the same thing.'
+              : 'მარცხნივ გადასმა გამოტოვებაა, მარჯვნივ გადასმა კი ცხოველის მოწონება. ქვედა ღილაკებიც ზუსტად იმავეს აკეთებს.'}
           </p>
 
-          <div className="mt-5 grid grid-cols-3 gap-3 text-sm">
-            <div className="rounded-2xl bg-secondary p-3">
-              <X className="mx-auto mb-1 h-5 w-5 text-destructive" />
-              გამოტოვება
+          <div className="mt-5 flex items-center justify-center gap-3" aria-label={isEnglish ? 'Swipe controls' : 'სვაიპის კონტროლები'}>
+            <div className="glass flex h-[52px] w-[52px] items-center justify-center rounded-full text-destructive">
+              <X className="h-6 w-6" />
             </div>
-            <div className="rounded-2xl bg-secondary p-3">
-              <Map className="mx-auto mb-1 h-5 w-5 text-primary" />
-              რუკა
+            <div className="glass inline-flex h-[52px] items-center gap-1.5 rounded-full bg-primary/10 px-4 text-primary">
+              <Map className="h-4 w-4" />
+              <span className="text-sm font-semibold">{isEnglish ? 'Map' : 'რუკა'}</span>
             </div>
-            <div className="rounded-2xl bg-secondary p-3">
-              <Heart className="mx-auto mb-1 h-5 w-5 text-accent" fill="currentColor" />
-              მოწონება
+            <div className="glass flex h-[60px] w-[60px] items-center justify-center rounded-full text-accent">
+              <Heart className="h-7 w-7" fill="currentColor" />
             </div>
           </div>
+
+          <p className="mt-4 text-xs leading-5 text-muted-foreground">
+            {isEnglish
+              ? 'Map shows the pet\'s approximate location. Saved pets are always available in Liked.'
+              : 'რუკა ცხოველის მიახლოებით ადგილს გაჩვენებს. მოწონებული ცხოველები ყოველთვის „მოწონებულებში“ დაგხვდება.'}
+          </p>
 
           <button
             type="button"
             onClick={close}
             className="mt-5 h-11 w-full rounded-full bg-primary font-semibold text-primary-foreground"
           >
-            გასაგებია
+            {isEnglish ? 'Got it' : 'გასაგებია'}
           </button>
         </motion.div>
       </div>
