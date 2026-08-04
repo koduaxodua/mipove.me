@@ -1,14 +1,13 @@
 import { Dog } from '@/data/dogs';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { MapPin, Phone, Heart, Calendar, Shield, Trash2, Check, AlertCircle, Map as MapIcon, Share2 } from 'lucide-react';
+import { MapPin, Phone, Heart, Calendar, Shield, Trash2, Check, AlertCircle, Map as MapIcon, Share2, Instagram } from 'lucide-react';
 import { canRequestPetDeletion, isPersistedPetId, useDeleteRequests } from '@/hooks/useDeleteRequests';
 import { sharePetLink } from '@/lib/sharePet';
+import { sharePetStoryCard } from '@/lib/shareStoryCard';
 import { toast } from '@/hooks/use-toast';
 import { useT, useLocale } from '@/contexts/Locale';
 import { useTranslatedDog } from '@/hooks/useTranslatedDog';
-import { AdaptivePetPhoto } from '@/components/AdaptivePetPhoto';
 import { SocialShareRow } from '@/components/SocialShareRow';
-import { WeatherChip } from '@/components/WeatherChip';
 
 interface Props {
   dog: Dog;
@@ -74,6 +73,21 @@ export function DogDetailSheet({ dog: rawDog, open, onOpenChange, onShowOnMap }:
     }
   };
 
+  const handleStoryShare = async () => {
+    try {
+      const result = await sharePetStoryCard(dog, locale);
+      if (result === 'downloaded') {
+        toast({ title: locale === 'en' ? 'Story card downloaded' : 'სტორის ბარათი ჩამოიტვირთა' });
+      }
+    } catch {
+      toast({
+        title: t('common.error'),
+        description: locale === 'en' ? 'Could not create the story card.' : 'სტორის ბარათის შექმნა ვერ მოხერხდა.',
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="h-[85dvh] rounded-t-3xl glass-strong !left-1/2 !-translate-x-1/2 !max-w-lg !w-full p-0 flex flex-col">
@@ -87,9 +101,7 @@ export function DogDetailSheet({ dog: rawDog, open, onOpenChange, onShowOnMap }:
         </SheetHeader>
 
         {/* scrollable content */}
-        <div className="flex-1 min-h-0 overflow-y-auto px-5 pt-3 pb-3 space-y-3">
-          <AdaptivePetPhoto src={dog.photo} alt={dog.name} mode="detail" />
-
+        <div className="flex-1 min-h-0 overflow-y-auto px-5 pt-3 pb-5 space-y-3">
           <div className="grid grid-cols-2 gap-2">
             <InfoChip icon={<Calendar className="h-4 w-4" />} label={t('detail.label.age')} value={dog.age} />
             <InfoChip icon={<Heart className="h-4 w-4" />} label={t('detail.label.gender')} value={genderLabel} />
@@ -115,24 +127,6 @@ export function DogDetailSheet({ dog: rawDog, open, onOpenChange, onShowOnMap }:
                 </span>
               </span>
             </button>
-          )}
-
-          <div className="flex items-center justify-between gap-2">
-            <WeatherChip lat={dog.publicLat ?? dog.lat} lng={dog.publicLng ?? dog.lng} />
-          </div>
-
-          {isPersistedPetId(dog.id) && (
-            <div className="space-y-2">
-              <button
-                type="button"
-                onClick={handleShare}
-                className="glass flex w-full items-center justify-center gap-2 rounded-2xl border border-border/60 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-primary/40 active:scale-[0.99]"
-              >
-                <Share2 className="h-4 w-4 text-primary" />
-                {locale === 'en' ? 'Share profile' : 'პროფილის გაზიარება'}
-              </button>
-              <SocialShareRow dog={dog} />
-            </div>
           )}
 
           {dog.description && (
@@ -173,32 +167,57 @@ export function DogDetailSheet({ dog: rawDog, open, onOpenChange, onShowOnMap }:
               </p>
             )}
           </div>
-        </div>
 
-        {/* sticky bottom — always visible delete-request action */}
-        <div className="flex-shrink-0 px-5 py-3 border-t border-border/40 bg-background/60 backdrop-blur safe-area-bottom">
-          <button
-            onClick={handleDeleteRequest}
-            className={`w-full inline-flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-medium transition active:scale-[0.98] ${
-            requested
-                ? 'bg-secondary text-foreground border-2 border-border'
-                : !canSendDeletionRequest
-                  ? 'bg-secondary/70 text-muted-foreground border-2 border-border/70 hover:bg-secondary'
-                : 'bg-destructive/10 text-destructive border-2 border-destructive/30 hover:bg-destructive/20'
-            }`}
-            disabled={requested}
-          >
-            {requested ? <Check className="h-4 w-4" /> : !canSendDeletionRequest ? <AlertCircle className="h-4 w-4" /> : <Trash2 className="h-4 w-4" />}
-            {requested
-              ? locale === 'en'
-                ? 'Request sent and will be reviewed.'
-                : 'მოთხოვნა გაიგზავნა და შემოწმდება.'
-              : !canSendDeletionRequest
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={handleStoryShare}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E4405F]/45 bg-[#E4405F]/10 px-4 py-3 text-sm font-semibold text-foreground transition hover:bg-[#E4405F]/15 active:scale-[0.99]"
+            >
+              <Instagram className="h-4 w-4 text-[#E4405F]" />
+              {locale === 'en' ? 'Share story card' : 'სტორის ბარათის გაზიარება'}
+            </button>
+
+            {isPersistedPetId(dog.id) && (
+              <>
+              <button
+                type="button"
+                onClick={handleShare}
+                className="glass flex w-full items-center justify-center gap-2 rounded-2xl border border-border/60 px-4 py-3 text-sm font-semibold text-foreground transition hover:border-primary/40 active:scale-[0.99]"
+              >
+                <Share2 className="h-4 w-4 text-primary" />
+                {locale === 'en' ? 'Share profile' : 'პროფილის გაზიარება'}
+              </button>
+                <SocialShareRow dog={dog} />
+              </>
+            )}
+          </div>
+
+          {/* deletion request */}
+          <div className="pt-1">
+            <button
+              onClick={handleDeleteRequest}
+              className={`w-full inline-flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-medium transition active:scale-[0.98] ${
+                requested
+                  ? 'bg-secondary text-foreground border-2 border-border'
+                  : !canSendDeletionRequest
+                    ? 'bg-secondary/70 text-muted-foreground border-2 border-border/70 hover:bg-secondary'
+                    : 'bg-destructive/10 text-destructive border-2 border-destructive/30 hover:bg-destructive/20'
+              }`}
+              disabled={requested}
+            >
+              {requested ? <Check className="h-4 w-4" /> : !canSendDeletionRequest ? <AlertCircle className="h-4 w-4" /> : <Trash2 className="h-4 w-4" />}
+              {requested
                 ? locale === 'en'
-                  ? 'Demo profile cannot be sent for review'
-                  : 'საცდელი პროფილი admin-ში არ იგზავნება'
-              : t('detail.deleteRequest')}
-          </button>
+                  ? 'Request sent and will be reviewed.'
+                  : 'მოთხოვნა გაიგზავნა და შემოწმდება.'
+                : !canSendDeletionRequest
+                  ? locale === 'en'
+                    ? 'Demo profile cannot be sent for review'
+                    : 'საცდელი პროფილი admin-ში არ იგზავნება'
+                  : t('detail.deleteRequest')}
+            </button>
+          </div>
         </div>
       </SheetContent>
     </Sheet>

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { SwipeCard } from '@/components/SwipeCard';
 import { DogDetailSheet } from '@/components/DogDetailSheet';
@@ -7,6 +7,8 @@ import { CardFooterActions } from '@/components/CardFooterActions';
 import { SkeletonCardStack } from '@/components/SkeletonCardStack';
 import { MonthlyVisitors } from '@/components/MonthlyVisitors';
 import { AnimalTip } from '@/components/AnimalTip';
+import { SwipeCareTip } from '@/components/SwipeCareTip';
+import { WeatherChip } from '@/components/WeatherChip';
 import { useDogs } from '@/hooks/useDogs';
 import { useLikedDogs } from '@/hooks/useLikedDogs';
 import { Link } from 'react-router-dom';
@@ -17,6 +19,8 @@ import type { Dog } from '@/data/dogs';
 
 const SHEET_SWITCH_DELAY_MS = 320;
 const PROGRAMMATIC_SWIPE_MS = 220;
+const SWIPES_PER_TIP = 5;
+const TIP_SHOW_DELAY_MS = 340;
 
 function isTextEditingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
@@ -33,6 +37,9 @@ export default function Index() {
   const [mapFocusDogId, setMapFocusDogId] = useState<string | null>(null);
   const [swipeExitDirection, setSwipeExitDirection] = useState<'left' | 'right'>('right');
   const [activeSwipeDirection, setActiveSwipeDirection] = useState<'left' | 'right' | null>(null);
+  const [showSwipeTip, setShowSwipeTip] = useState(false);
+  const [tipIndex, setTipIndex] = useState(0);
+  const swipeCountRef = useRef(0);
 
   const availableDogs = dogs.filter(
     d =>
@@ -52,6 +59,16 @@ export default function Index() {
         toast({ title: t('index.toast.liked', { name: currentDog.name }) });
       } else {
         dislikeDog(currentDog);
+      }
+
+      const nextSwipeCount = swipeCountRef.current + 1;
+      swipeCountRef.current = nextSwipeCount;
+      if (nextSwipeCount % SWIPES_PER_TIP === 0) {
+        window.setTimeout(() => {
+          setTipIndex(nextSwipeCount / SWIPES_PER_TIP - 1);
+          setShowSwipeTip(true);
+          console.log('[swipe-tip] shown', { swipeCount: nextSwipeCount });
+        }, TIP_SHOW_DELAY_MS);
       }
     },
     [currentDog, likeDog, dislikeDog, t]
@@ -129,7 +146,10 @@ export default function Index() {
         <div className="flex min-w-0 -translate-x-1 translate-y-5 flex-col leading-tight sm:translate-y-4">
           <span className="text-base sm:text-lg font-bold text-foreground truncate">{t('app.title')}</span>
           <span className="whitespace-nowrap text-[9px] text-muted-foreground sm:text-[11px]">{t('app.tagline')}</span>
-          <MonthlyVisitors />
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <MonthlyVisitors />
+            <WeatherChip lat={currentDog?.publicLat ?? currentDog?.lat} lng={currentDog?.publicLng ?? currentDog?.lng} />
+          </div>
         </div>
       </div>
 
@@ -139,6 +159,12 @@ export default function Index() {
           <div className="text-center">
             <p className="text-sm font-medium text-foreground">{t('index.loading.title')}</p>
             <p className="text-xs text-muted-foreground">{t('index.loading.sub')}</p>
+          </div>
+        </div>
+      ) : showSwipeTip ? (
+        <div className="flex flex-1 flex-col items-center justify-center gap-3 py-2">
+          <div className="relative aspect-[3/4] w-full max-w-sm sm:max-w-md lg:max-w-lg" style={{ maxHeight: 'min(calc(100dvh - 350px), 70vh)' }}>
+            <SwipeCareTip index={tipIndex} onContinue={() => setShowSwipeTip(false)} />
           </div>
         </div>
       ) : allSwiped ? (
@@ -186,7 +212,7 @@ export default function Index() {
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center w-full min-h-0 gap-3 py-2">
           {/* Card stack — flexible height, capped to fit on small phones */}
-          <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg flex-1 min-h-0 aspect-[3/4] mx-auto" style={{ maxHeight: 'min(calc(100dvh - 320px), 70vh)' }}>
+          <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg flex-1 min-h-0 aspect-[3/4] mx-auto" style={{ maxHeight: 'min(calc(100dvh - 350px), 70vh)' }}>
             <AnimatePresence>
               {nextDog && (
                 <SwipeCard key={nextDog.id} dog={nextDog} onSwipe={() => {}} isTop={false} />

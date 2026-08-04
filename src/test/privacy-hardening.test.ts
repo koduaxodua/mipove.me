@@ -194,18 +194,24 @@ describe('privacy/security hardening', () => {
     expect(isPersistedPetId('1')).toBe(false);
   });
 
-  it('uses adaptive lightly cropped frames for pet images', () => {
+  it('uses adaptive frames where images are shown and keeps detail sheets focused on information', () => {
     expect(pickPhotoFrameRatio(0.66)).toBeCloseTo(2 / 3);
     expect(pickPhotoFrameRatio(1)).toBe(1);
     expect(pickPhotoFrameRatio(1.8)).toBeCloseTo(16 / 9);
 
-    expect(read('src/components/DogDetailSheet.tsx')).toContain('mode="detail"');
+    expect(read('src/components/DogDetailSheet.tsx')).not.toContain('mode="detail"');
     expect(read('src/components/SwipeCard.tsx')).toContain('mode="card"');
     expect(read('src/pages/AddDog.tsx')).toContain('mode="preview"');
     expect(read('src/components/AdaptivePetPhoto.tsx')).toContain('object-contain');
     expect(read('src/components/AdaptivePetPhoto.tsx')).toContain('card: 1.16');
     expect(read('src/components/AdaptivePetPhoto.tsx')).toContain('detail: 1.08');
     expect(read('src/components/DogDetailSheet.tsx')).not.toContain('h-56 sm:h-72 object-cover');
+  });
+
+  it('does not put caretaker contact details on generated story cards', () => {
+    const storyCard = read('src/lib/shareStoryCard.ts');
+    expect(storyCard).toContain('navigator.share');
+    expect(storyCard).not.toContain('caretakerPhone');
   });
 
   it('links pet detail sheets to a focused map view', () => {

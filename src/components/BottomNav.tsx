@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Heart, PawPrint, Plus, FileText } from 'lucide-react';
+import { BookOpen, Heart, PawPrint, Plus } from 'lucide-react';
 import { useT, type TKey } from '@/contexts/Locale';
 import { SupportBankDetails } from '@/components/SupportBankDetails';
 
@@ -12,7 +12,7 @@ const navItems: NavItem[] = [
   { type: 'route', path: '/favorites', icon: Heart, labelKey: 'nav.favorites' },
   { type: 'route', path: '/add', icon: Plus, labelKey: 'nav.add' },
   { type: 'support' },
-  { type: 'route', path: '/terms', icon: FileText, labelKey: 'nav.terms' },
+  { type: 'route', path: '/guide', icon: BookOpen, labelKey: 'footer.guides' },
 ];
 
 export function BottomNav() {

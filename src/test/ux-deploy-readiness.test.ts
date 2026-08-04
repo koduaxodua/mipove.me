@@ -57,9 +57,14 @@ describe('ux copy and deploy readiness', () => {
   it('exposes free public API integrations in the UI', () => {
     expect(read('src/components/AnimalTip.tsx')).toContain('catfact.ninja');
     expect(read('src/pages/Index.tsx')).toContain('<AnimalTip />');
+    expect(read('src/pages/Index.tsx')).toContain('<WeatherChip');
+    expect(read('src/pages/Index.tsx')).toContain('SWIPES_PER_TIP = 5');
+    expect(read('src/pages/Index.tsx')).toContain('<SwipeCareTip');
+    expect(read('src/components/SwipeCareTip.tsx')).toContain('to="/guide"');
     expect(read('src/lib/sharePet.ts')).toContain('t.me/share/url');
     expect(read('src/lib/sharePet.ts')).toContain('wa.me');
     expect(read('src/lib/sharePet.ts')).toContain('facebook.com/sharer');
+    expect(read('src/components/DogDetailSheet.tsx')).toContain('sharePetStoryCard');
     expect(read('src/components/WeatherChip.tsx')).toContain('open-meteo.com');
     expect(read('src/lib/breeds.ts')).toContain('dog.ceo');
     expect(read('src/lib/breeds.ts')).toContain('thecatapi.com');
